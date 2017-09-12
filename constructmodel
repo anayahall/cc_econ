@@ -1,0 +1,19 @@
+*Construct Model!
+
+
+
+######################################
+# CLIMATE DYNAMICS COMPONENT  #######
+######################################
+
+
+######################################
+# CLIMATE DYNAMICS COMPONENT  #######
+######################################
+
+#run both scenarios
+base = calcForcing(CO2constant=false)
+constant = calcForcing(CO2constant=true)
+
+#merge into single dataset
+forcing_data = [base;constant]

@@ -1,0 +1,14 @@
+﻿<Properties StartupConfiguration="{388887BA-6383-4872-8E2E-5E134F6A0406}|Default">
+  <MonoDevelop.Ide.Workbench ActiveDocument="CCecon/assignment1.txt">
+    <Files>
+      <File FileName="CCecon/assignment1.txt" Line="1" Column="1" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Default" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.ItemProperties.CCecon PreferredExecutionTarget="MonoDevelop.Default" />
+  <MultiItemStartupConfigurations />
+</Properties>
