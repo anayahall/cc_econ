@@ -1,14 +1,14 @@
 # Anaya Hall
 # CCE - Fall 2017
 
-using StackTraces
+########################################################
+################## BUILD MODEL #########################
+########################################################
 
-#BUILD MODEL
 include("carboncycle_m.jl")
 include("climatedynamics.jl")
 
-
-function run_my_model()
+function run_my_model(;scenario::AbstractString="bau")
        
     my_model = Model()
 
@@ -16,6 +16,14 @@ function run_my_model()
 
     addcomponent(my_model, carboncycle)  #Order matters here. 
     addcomponent(my_model, climatedynamics)
+
+    if scenario == "bau"
+        CO2emis = emission_data()
+    elseif scenario == "constant"
+        CO2emis = fill(9.9693, 291)
+    elseif scenario == "imm_red"
+        CO2emis = fill(9.9693 * 0.33, 291)
+    end
 
     #set parameters for CARBON CYCLE COMPONENT
 	setparameter(my_model, :carboncycle, :CO2emis, CO2emis)
@@ -36,21 +44,35 @@ function run_my_model()
 
 end
 
+########################################################
+##################### RUN MODEL ########################
+########################################################
+
 
 using Mimi
 include("parameters.jl")
 
-run1 = run_my_model()
+bau_run = run_my_model(scenario="bau")
+con_run = run_my_model(scenario="constant")
+ir_run = run_my_model(scenario="imm_red")
 
 println("*******************************************")
 println("MODEL DONE RUNNING")
 println("*******************************************")
 
-#check results before plotting
-BAU_temp = run1[:climatedynamics, :temp]
+#prepare results for plotting
+BAU_temp = bau_run[:climatedynamics, :temp]
+constant_temp = con_run[:climatedynamics, :temp]
+ir_temp = ir_run[:climatedynamics, :temp]
 
-###### PLOT ##########################################
+BAU_conc = bau_run[:climatedynamics, :CO2ppm]
+constant_conc = con_run[:climatedynamics, :CO2ppm]
+
+########################################################
+################### PLOT OUTPUT ########################
+########################################################
+
 include("plots.jl")
 
-tempplot(xarray = year, yarray1 = BAU_temp, yarray2 = test3)
-# concplot(xarray = year, yarray1 = BAU_temp, yarray2 = test3)
+tplot = tempplot(xarray = year, yarray1 = BAU_temp, yarray2 = constant_temp, yarray3 = ir_temp)
+cplot = concplot(xarray = year, yarray1 = BAU_conc, yarray2 = constant_conc)

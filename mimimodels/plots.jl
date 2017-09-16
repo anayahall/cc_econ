@@ -3,13 +3,14 @@
 
 using Gadfly
 
-function tempplot(;xarray::Array=year, yarray1::Array=test2, yarray2::Array=test3)
+function tempplot(;xarray::Array=year, yarray1::Array=test2, yarray2::Array=test3, yarray3::Array=test2)
     
     plot(layer(x=xarray, y=yarray1, Geom.line, Theme(default_color=color("red"))),
     layer(x=xarray, y=yarray2, Geom.line, Theme(default_color=color("blue"))), 
+    layer(x=xarray, y=yarray3, Geom.line, Theme(default_color=color("green"))),     
     Guide.xlabel("Year"), Guide.ylabel("Temperature (C)"), 
     Guide.title("Temperature Anomaly"),
-    Guide.manual_color_key("Scenario", ["BAU", "Constant"], ["red", "blue"]))
+    Guide.manual_color_key("Scenario", ["BAU", "Constant", "IR"], ["red", "blue", "green"]))
 
 end
 
