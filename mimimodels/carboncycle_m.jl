@@ -46,6 +46,4 @@ function run_timestep(state::carboncycle, t::Int64)
 
 end
 
-println("*******************************************")
-println("CARBON CYCLE DONE")
-println("*******************************************")
+
