@@ -24,8 +24,6 @@ function run_timestep(state::climatedynamics, t::Int64)
     v = state.Variables
     p = state.Parameters
 
-    stacktrace()
-
     v.RF_CO2[t] = 5.35 * log(p.CO2ppm[t]/p.CO2ppm0)
     v.RF_Total[t] = v.RF_CO2[t] + p.RF_Other[t]
 

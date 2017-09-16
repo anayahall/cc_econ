@@ -42,5 +42,15 @@ include("parameters.jl")
 
 run1 = run_my_model()
 
+println("*******************************************")
+println("MODEL DONE RUNNING")
+println("*******************************************")
+
 #check results before plotting
-run1[:climatedynamics, :temp]
+BAU_temp = run1[:climatedynamics, :temp]
+
+###### PLOT ##########################################
+include("plots.jl")
+
+tempplot(xarray = year, yarray1 = BAU_temp, yarray2 = test3)
+# concplot(xarray = year, yarray1 = BAU_temp, yarray2 = test3)
