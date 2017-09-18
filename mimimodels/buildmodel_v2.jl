@@ -5,7 +5,8 @@
 ################## BUILD MODEL #########################
 ########################################################
 
-include("carboncycle_m.jl")
+include("emissions.jl")
+include("carboncycle.jl")
 include("climatedynamics.jl")
 
 function run_my_model(;scenario::AbstractString="bau")
@@ -14,16 +15,23 @@ function run_my_model(;scenario::AbstractString="bau")
 
     setindex(my_model, :time, collect(2010:1:2300))
 
-    addcomponent(my_model, carboncycle)  #Order matters here. 
+    #Order matters here: 
+    addcomponent(my_model, emissions)
+    addcomponent(my_model, carboncycle)  
     addcomponent(my_model, climatedynamics)
 
     if scenario == "bau"
         CO2emis = emission_data()
-    elseif scenario == "constant"
-        CO2emis = fill(9.9693, 291)
-    elseif scenario == "imm_red"
-        CO2emis = fill(9.9693 * 0.33, 291)
+    else
+        CO2emis = fill(0, 291)
     end
+
+    #set parameters for EMISSIONS COMPONENT
+    setparameter(my_model, :emissions, :pop, pop)
+    setparameter(my_model, :emissions, :gdppc, gdppc)
+    setparameter(my_model, :emissions, :energyi, energyi)
+    setparameter(my_model, :emissions, :carboni, carboni)
+    setparameter(my_model, :emissions, :luco2, luco2)
 
     #set parameters for CARBON CYCLE COMPONENT
 	setparameter(my_model, :carboncycle, :CO2emis, CO2emis)
@@ -48,25 +56,19 @@ end
 ##################### RUN MODEL ########################
 ########################################################
 
-
 using Mimi
 include("parameters.jl")
 
 bau_run = run_my_model(scenario="bau")
-con_run = run_my_model(scenario="constant")
-ir_run = run_my_model(scenario="imm_red")
+# con_run = run_my_model(scenario="constant")
+# ir_run = run_my_model(scenario="imm_red")
+# lr_run = run_my_model(scenario="later_red")
+# s5_run = run_my_model(scenario=="s5")
 
 println("*******************************************")
 println("MODEL DONE RUNNING")
 println("*******************************************")
 
-#prepare results for plotting
-BAU_temp = bau_run[:climatedynamics, :temp]
-constant_temp = con_run[:climatedynamics, :temp]
-ir_temp = ir_run[:climatedynamics, :temp]
-
-BAU_conc = bau_run[:climatedynamics, :CO2ppm]
-constant_conc = con_run[:climatedynamics, :CO2ppm]
 
 ########################################################
 ################### PLOT OUTPUT ########################
@@ -74,5 +76,5 @@ constant_conc = con_run[:climatedynamics, :CO2ppm]
 
 include("plots.jl")
 
-tplot = tempplot(xarray = year, yarray1 = BAU_temp, yarray2 = constant_temp, yarray3 = ir_temp)
-cplot = concplot(xarray = year, yarray1 = BAU_conc, yarray2 = constant_conc)
+tplot = tempplot(xarray = year, yarray1 = BAU_temp, yarray2 = constant_temp, yarray3 = ir_temp, yarray4 = lr_temp)
+cplot = concplot(xarray = year, yarray1 = BAU_conc, yarray2 = constant_conc, yarray3 = ir_conc, yarray4 = lr_conc)
