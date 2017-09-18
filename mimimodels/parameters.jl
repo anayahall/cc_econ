@@ -50,7 +50,7 @@ function emission_data()
     return CO2emis
 end
 
-CO2emis = emission_data()
+# CO2emis = emission_data()
 
 ######################################
 #### CLIMATE DYNAMICS COMPONENT  #####

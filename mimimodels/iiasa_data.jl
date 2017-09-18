@@ -33,24 +33,25 @@ function extend_kaya()
     
     for (index, year) in enumerate(year)
         
-        println("YEAR: ", year)
-        println("INDEX: ", index)
+        # println("YEAR: ", year)
+        # println("INDEX: ", index)
         if year.<2092                               # Decreasing emissions 
             luco2 = -57.003*(year) + 119296
         else
             luco2 = 0.0                             # Constant zero after 2092
         end
-        println("LU EMIS: ", luco2)
+        # println("LU EMIS: ", luco2)
+
         gdppc = (2E-204) * (year) ^ 61.966
-        println("GDP PC ", gdppc)
+        # println("GDP PC ", gdppc)
         pop = -0.7347*(year) ^ 2 + 3024.1*year - 3E+06  
-        println("POP: ", pop)    
+        # println("POP: ", pop)    
         # energyi =(1E-06)*(year) ^ 2 - (0.0041)(year) + 4.2876     #POLYNOMIAL
         energyi = (1E+13)*e^(-0.018*year)                           #EXPONENTIAL FXN
-        println("energyi ", energyi)
+        # println("energyi ", energyi)
         # carboni = (0.0009)(year) ^ 2 - 3.7937*year + 4051.3       #POLYNOMIAL
         carboni = (8E+09) * year ^ (-2.421)                         #POWER
-        println("Carbon I ", carboni)
+        # println("Carbon I ", carboni)
         
         # if y == 2005
         #     luco2 = kaya[:LUCO2][1]

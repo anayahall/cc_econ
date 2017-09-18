@@ -7,14 +7,15 @@ function tempplot(;xarray::Array=year, yarray1::Array=test2,
     yarray2::Array=test3, yarray3::Array=test2, 
     yarray4::Array=test2, yarray5::Array=test2)
     
-    plot(layer(x=xarray, y=yarray1, Geom.line, Theme(default_color=color("red"))),
+    Gadfly.plot(layer(x=xarray, y=yarray1, Geom.line, Theme(default_color=color("red"))),
     layer(x=xarray, y=yarray2, Geom.line, Theme(default_color=color("blue"))), 
     layer(x=xarray, y=yarray3, Geom.line, Theme(default_color=color("green"))),     
     layer(x=xarray, y=yarray4, Geom.line, Theme(default_color=color("purple"))),         
     layer(x=xarray, y=yarray5, Geom.line, Theme(default_color=color("pink"))),             
     Guide.xlabel("Year"), Guide.ylabel("Temperature (degrees C)"), 
     Guide.title("Temperature Anomaly"),
-    Guide.manual_color_key("Scenario: ", ["BAU", "Constant", "Immediate Reduction", "Later Reduction", "5"], 
+    Guide.manual_color_key("Scenario: ", ["BAU", "Population", "GDP/Pop",
+     "Energy Intensity", "Carbon Intensity "], 
     ["red", "blue", "green", "purple", "pink"]))
 
 end
@@ -39,6 +40,11 @@ test3 = collect(2:292)
 ### Prepare results for plotting
 
 BAU_temp = bau_run[:climatedynamics, :temp]
+pop_temp = pop_run[:climatedynamics, :temp]
+gdp_temp = gdp_run[:climatedynamics, :temp]
+ei_temp = ei_run[:climatedynamics, :temp]
+ci_temp = ci_run[:climatedynamics, :temp]
+
 # constant_temp = con_run[:climatedynamics, :temp]
 # ir_temp = ir_run[:climatedynamics, :temp]
 # lr_temp = lr_run[:climatedynamics, :temp]
