@@ -10,13 +10,21 @@ using DataFrames
 
 include("iiasa_data.jl")
 
-df = kayadata[(kayadata[:Year].>=2010),:]
+df = kayadata
 
-pop     = df[:Pop]                  # persons (millions of people)   
-gdppc   = df[:GDPPC]                # GDP per capita ($ billions / millions of person)
-energyi = df[:Energyi]              # Energy Intensity = Energy Use (EJ) / GDP (billions $)
-carboni = df[:Carboni]              # Carbon Intensity = Emissions (Mt CO2) / Energy (EJ)
-luco2   = df[:LUCO2]                # CO2 emissions from Land use (Mt CO2)
+pop     = df[:Population]                  # persons (millions of people)   
+gdppc   = df[:GDPperCapita]                # GDP per capita ($ billions / millions of person)
+energyi = df[:Energy_Intensity]              # Energy Intensity = Energy Use (EJ) / GDP (billions $)
+carboni = df[:Emissions_intensity]              # Carbon Intensity = Emissions (Mt CO2) / Energy (EJ)
+luco2   = df[:LandUseEmissions]                # CO2 emissions from Land use (Mt CO2)
+
+
+######################################
+## EMISSIONS REDUCTIONS / ABATEMENT ##
+######################################
+
+
+##parameters
 
 
 ######################################

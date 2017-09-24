@@ -17,6 +17,7 @@ function run_my_model(;scenario::AbstractString="bau")
 
     #Order matters here: 
     addcomponent(my_model, emissions)
+    addcomponent(my_model, abatement)
     addcomponent(my_model, carboncycle)  
     addcomponent(my_model, climatedynamics)
 
@@ -50,6 +51,13 @@ function run_my_model(;scenario::AbstractString="bau")
     end
     setparameter(my_model, :emissions, :luco2, luco2)
     
+    #set parameters for EMISSIONS REDUCTION / ABATEMENT COMPONENT
+	setparameter(my_model, :abatement, #:M_atm0, M_atm0)
+	setparameter(my_model, :abatement, #:M_lo0, M_lo0)
+    setparameter(my_model, :abatement, #:M_up0, M_up0)
+    connectparameter(my_model, :abatement, :CO2emis, :carboncycle, :emis) 
+
+
     #set parameters for CARBON CYCLE COMPONENT
 	setparameter(my_model, :carboncycle, :M_atm0, M_atm0)
 	setparameter(my_model, :carboncycle, :M_lo0, M_lo0)

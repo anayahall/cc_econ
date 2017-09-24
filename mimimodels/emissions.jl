@@ -25,6 +25,6 @@ function run_timestep(state::emissions, t::Int64)
     v = state.Variables
     p = state.Parameters
 
-    v.emis[t] = ((p.pop[t] * p.gdppc[t] * p.energyi[t] * p.carboni[t]) + p.luco2[t])*(12/44) / 10^3
-    println("TIME: ", t, "----- EMIS: ", v.emis[t])
+    v.emis[t] = ((p.pop[t] * p.gdppc[t] * p.energyi[t] * p.carboni[t]) + p.luco2[t])* (12/44) / 10^3
+    # println("TIME: ", t, "----- EMIS: ", v.emis[t])
 end
