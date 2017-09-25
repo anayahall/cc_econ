@@ -6,6 +6,7 @@
 ########################################################
 
 include("emissions.jl")
+include("abatement.jl")
 include("carboncycle.jl")
 include("climatedynamics.jl")
 
@@ -50,13 +51,16 @@ function run_my_model(;scenario::AbstractString="bau")
         setparameter(my_model, :emissions, :carboni, carboni)
     end
     setparameter(my_model, :emissions, :luco2, luco2)
+    setparameter(my_model, :emissions, :marginalton, marginalton)
     
     #set parameters for EMISSIONS REDUCTION / ABATEMENT COMPONENT
-	setparameter(my_model, :abatement, #:M_atm0, M_atm0)
-	setparameter(my_model, :abatement, #:M_lo0, M_lo0)
-    setparameter(my_model, :abatement, #:M_up0, M_up0)
-    connectparameter(my_model, :abatement, :CO2emis, :carboncycle, :emis) 
-
+	setparameter(my_model, :abatement, :bkstp0, bkstp0)
+    setparameter(my_model, :abatement, :sigma0, sigma0)
+    setparameter(my_model, :abatement, :sigma_rate, sigma_rate)
+    setparameter(my_model, :abatement, :AC_exponent, AC_exponent)
+    setparameter(my_model, :abatement, :epolicy, epolicy)
+    setparameter(my_model, :abatement, :gdppc, gdppc)
+    
 
     #set parameters for CARBON CYCLE COMPONENT
 	setparameter(my_model, :carboncycle, :M_atm0, M_atm0)
@@ -98,6 +102,8 @@ println("*******************************************")
 println("MODEL DONE RUNNING")
 println("*******************************************")
 
+bau_run[:abatement, :AC_share]
+# gdp_cost = bau_run[:abatement, :AC_share] * bau_run[:emissions, :gdppc]
 
 ########################################################
 ################### PLOT OUTPUT ########################
