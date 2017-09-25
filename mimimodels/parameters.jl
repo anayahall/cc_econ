@@ -14,17 +14,20 @@ df = kayadata
 
 pop     = df[:Population]                  # persons (millions of people)   
 gdppc   = df[:GDPperCapita]                # GDP per capita ($ billions / millions of person)
-energyi = df[:Energy_Intensity]              # Energy Intensity = Energy Use (EJ) / GDP (billions $)
-carboni = df[:Emissions_intensity]              # Carbon Intensity = Emissions (Mt CO2) / Energy (EJ)
-luco2   = df[:LandUseEmissions]                # CO2 emissions from Land use (Mt CO2)
-
+energyi = df[:Energy_Intensity]            # Energy Intensity = Energy Use (EJ) / GDP (billions $)
+carboni = df[:Emissions_intensity]         # Carbon Intensity = Emissions (Mt CO2) / Energy (EJ)
+luco2   = df[:LandUseEmissions]            # CO2 emissions from Land use (Mt CO2)
+marginalton = 0.0                          # MARGINAL TON??? 
 
 ######################################
-## EMISSIONS REDUCTIONS / ABATEMENT ##
+## EMISSIONS REDUCTIONS / ABATEMENT ## (FROM DICE MODEL)
 ######################################
 
-
-##parameters
+bkstp0       = 344.000                # Backstop Price ( $1000 / tC )
+sigma0       = 0.489                  # Sigma (industrial, MTCO2/$1000)
+sigma_rate   = -0.010                 # Growth rate of sigma (per year, log)
+AC_exponent  = 2.800                  # Exponent of control cost function
+epolicy      = 0.05                   # Emissions Policy : Emissions reduction (%)  
 
 
 ######################################
