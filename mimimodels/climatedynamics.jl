@@ -34,6 +34,6 @@ function run_timestep(state::climatedynamics, t::Int64)
     else
         v.temp[t] = v.temp[t-1] + p.delay * (v.Eq_temp[t] - v.temp[t-1])
     end
-
+    # println("T: ", t, "- CO2PPM: ",p.CO2ppm[t])
 end 
 
