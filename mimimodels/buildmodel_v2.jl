@@ -23,44 +23,32 @@ function run_my_model(;scenario::AbstractString="bau")
     addcomponent(my_model, climatedynamics)
 
     #set parameters for EMISSIONS COMPONENT
-
+    setparameter(my_model, :emissions, :pop, pop)
+    setparameter(my_model, :emissions, :gdppc, gdppc)
+    setparameter(my_model, :emissions, :energyi, energyi)
+    setparameter(my_model, :emissions, :carboni, carboni)
+    setparameter(my_model, :emissions, :luco2, luco2)    
     if scenario == "bau"
-        setparameter(my_model, :emissions, :pop, pop)
-        setparameter(my_model, :emissions, :gdppc, gdppc)
-        setparameter(my_model, :emissions, :energyi, energyi)
-        setparameter(my_model, :emissions, :carboni, carboni)
-    elseif scenario == "dpop"
-        setparameter(my_model, :emissions, :pop, pop)
-        setparameter(my_model, :emissions, :gdppc, fill(gdppc[1], 291))
-        setparameter(my_model, :emissions, :energyi, fill(energyi[1], 291))
-        setparameter(my_model, :emissions, :carboni, fill(carboni[1],291))
-    elseif scenario == "dgdp"
-        setparameter(my_model, :emissions, :pop, fill(pop[1],291))
-        setparameter(my_model, :emissions, :gdppc, gdppc)
-        setparameter(my_model, :emissions, :energyi, fill(energyi[1], 291))
-        setparameter(my_model, :emissions, :carboni, fill(carboni[1],291))
-    elseif scenario == "denergyi"
-        setparameter(my_model, :emissions, :pop, fill(pop[1],291))
-        setparameter(my_model, :emissions, :gdppc, fill(gdppc[1], 291))
-        setparameter(my_model, :emissions, :energyi, energyi)
-        setparameter(my_model, :emissions, :carboni, fill(carboni[1],291))
-    elseif scenario == "dcarboni"
-        setparameter(my_model, :emissions, :pop, fill(pop[1],291))
-        setparameter(my_model, :emissions, :gdppc, fill(gdppc[1], 291))
-        setparameter(my_model, :emissions, :energyi, fill(energyi[1], 291))
-        setparameter(my_model, :emissions, :carboni, carboni)
-    end
-    setparameter(my_model, :emissions, :luco2, luco2)
-    setparameter(my_model, :emissions, :marginalton, marginalton)
+        setparameter(my_model, :emissions, :epolicy, fill(0.0,291))            
+    elseif scenario == "EP1"
+        setparameter(my_model, :emissions, :epolicy, epolicy1)
+    elseif scenario == "EP2"
+        setparameter(my_model, :emissions, :epolicy, epolicy2)
+    end   
     
-    #set parameters for EMISSIONS REDUCTION / ABATEMENT COMPONENT
+    #set parameters for ABATEMENT COMPONENT
 	setparameter(my_model, :abatement, :bkstp0, bkstp0)
     setparameter(my_model, :abatement, :sigma0, sigma0)
     setparameter(my_model, :abatement, :sigma_rate, sigma_rate)
     setparameter(my_model, :abatement, :AC_exponent, AC_exponent)
-    setparameter(my_model, :abatement, :epolicy, epolicy)
-    setparameter(my_model, :abatement, :gdppc, gdppc)
-    
+    if scenario == "bau"
+        setparameter(my_model, :abatement, :epolicy, fill(0.0,291))            
+    elseif scenario == "EP1"
+        setparameter(my_model, :abatement, :epolicy, epolicy1)
+    elseif scenario == "EP2"
+        setparameter(my_model, :abatement, :epolicy, epolicy2)
+    end        
+    setparameter(my_model, :abatement, :gdp, gdp)
 
     #set parameters for CARBON CYCLE COMPONENT
 	setparameter(my_model, :carboncycle, :M_atm0, M_atm0)
@@ -89,21 +77,12 @@ using Mimi
 include("parameters.jl")
 
 bau_run = run_my_model(scenario="bau")
-pop_run = run_my_model(scenario="dpop")
-gdp_run = run_my_model(scenario="dgdp")
-ei_run  = run_my_model(scenario="denergyi")
-ci_run  = run_my_model(scenario="dcarboni")
-# con_run = run_my_model(scenario="constant")
-# ir_run = run_my_model(scenario="imm_red")
-# lr_run = run_my_model(scenario="later_red")
-# s5_run = run_my_model(scenario=="s5")
+ep1_run = run_my_model(scenario="EP1")
+ep2_run = run_my_model(scenario="EP2")
 
 println("*******************************************")
 println("MODEL DONE RUNNING")
 println("*******************************************")
-
-bau_run[:abatement, :AC_share]
-# gdp_cost = bau_run[:abatement, :AC_share] * bau_run[:emissions, :gdppc]
 
 ########################################################
 ################### PLOT OUTPUT ########################
@@ -111,12 +90,11 @@ bau_run[:abatement, :AC_share]
 
 include("plots.jl")
 
-
-# Gadfly.plot(x = year, y = BAU_temp)
-
 # tplot = tempplot(xarray = year, yarray1 = BAU_temp, yarray2 = constant_temp, yarray3 = ir_temp, yarray4 = lr_temp)
 # cplot = concplot(xarray = year, yarray1 = BAU_conc, yarray2 = constant_conc, yarray3 = ir_conc, yarray4 = lr_conc)
 
 # PSET #3 PLOT
-tplot = tempplot(xarray = year, yarray1 = BAU_temp, yarray2 = pop_temp, 
-                yarray3 = gdp_temp, yarray4 = ei_temp, yarray5 = ci_temp)
+tplot = tempplot3(xarray = year, yarray1 = BAU_temp, yarray2 = ep1_temp, 
+                yarray3 = ep2_temp)
+cplot = costplot3(xarray = year, yarray1 = BAU_temp, yarray2 = ep1_cost, 
+                yarray3 = ep2_cost)

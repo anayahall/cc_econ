@@ -20,7 +20,7 @@ b33 = 1. - b32
     M_up    = Variable(index=[time])    #Upper ocean conc at time t
     CO2ppm  = Variable(index=[time])    #CO2 concentration in atm in ppm
 
-    CO2emis = Parameter(index=[time])   #CO2 emissions in Gt/year from RCP8.5
+    CO2emis = Parameter(index=[time])   #CO2 emissions in Gt/year from emissions component
     M_atm0  = Parameter()               #Initial atm conc
     M_lo0   = Parameter()               #Intial lower ocean conc
     M_up0   = Parameter()               #Intial upper ocean conc

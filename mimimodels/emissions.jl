@@ -12,14 +12,14 @@ using Mimi
 @defcomp emissions begin
 
     emis        = Variable(index=[time])        # Total Emissions (GtC/yr)
-    fossil   = Variable(index=[time])        # Fossil Emissions (Mt CO2 / year)
+    fossil      = Variable(index=[time])        # Fossil Emissions (Mt CO2 / year)
 
     pop         = Parameter(index=[time])       # persons (millions?)   
     gdppc       = Parameter(index=[time])       # GDP per capita ($/person)
     energyi     = Parameter(index=[time])       # Energy Intensity = Energy Use (EJ) / GDP ($)
     carboni     = Parameter(index=[time])       # Carbon Intensity = Emissions (Mt CO2) / Energy (EJ)
     luco2       = Parameter(index=[time])       # Land use CO2 emissions (Mt / year)
-    marginalton = Parameter()
+    epolicy     = Parameter(index=[time])
 
 end
 
@@ -28,6 +28,7 @@ function run_timestep(state::emissions, t::Int64)
     p = state.Parameters
 
     v.fossil[t] = (p.pop[t] * p.gdppc[t] * p.energyi[t] * p.carboni[t])
-    v.emis[t] =  (v.fossil[t] + p.luco2[t]) * (12/44) / 10^3    #convert from Mt CO2 to Gt C
+    v.emis[t] =  (v.fossil[t] + p.luco2[t]) * (1 - (p.epolicy[t]/100)) * (12/44)/(10^3)     #convert from Mt CO2 to Gt C
     # println("TIME: ", t, "----- EMIS: ", v.emis[t])
 end
+

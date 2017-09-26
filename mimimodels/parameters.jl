@@ -17,18 +17,42 @@ gdppc   = df[:GDPperCapita]                # GDP per capita ($ billions / millio
 energyi = df[:Energy_Intensity]            # Energy Intensity = Energy Use (EJ) / GDP (billions $)
 carboni = df[:Emissions_intensity]         # Carbon Intensity = Emissions (Mt CO2) / Energy (EJ)
 luco2   = df[:LandUseEmissions]            # CO2 emissions from Land use (Mt CO2)
-marginalton = 0.0                          # MARGINAL TON??? 
+gdp     = pop .* gdppc
+
+# EMISSIONS POLICY #1
+epolicy1 = Array(Float64,291)                  # Emissions Policy : Emissions reduction (%)  
+for (index,y) in enumerate(1:291)
+    if y .< 20
+        epolicy1[y] = 0.0
+    elseif y .< 90
+        epolicy1[y] = (100/70) + epolicy1[y-1]
+    elseif y .>= 90
+        epolicy1[y] = 100
+    end
+    # println("Y: ", y , "---- EPOLICY ", epolicy1[y])
+end
+
+# EMISSIONS POLICY #2
+epolicy2 = Array(Float64,291)                  # Emissions Policy : Emissions reduction (%)  
+for (index,y) in enumerate(1:291)
+    if y == 1
+        epolicy2[y] = (100/90)
+    elseif y .< 90
+        epolicy2[y] = (100/90) + epolicy2[y-1]
+    elseif y .>= 90
+        epolicy2[y] = 100
+    end
+end
+
 
 ######################################
 ## EMISSIONS REDUCTIONS / ABATEMENT ## (FROM DICE MODEL)
 ######################################
 
-bkstp0       = 344.000                # Backstop Price ( $1000 / tC )
-sigma0       = 0.489                  # Sigma (industrial, MTCO2/$1000)
-sigma_rate   = -0.010                 # Growth rate of sigma (per year, log)
+bkstp0       = 344.000                # Initial Backstop Price ( $1000 / tC )
+sigma0       = 0.489                  # Initial Sigma (industrial, MTCO2/$1000)
+sigma_rate   = -0.001                 # Growth rate of sigma (per year, log)
 AC_exponent  = 2.800                  # Exponent of control cost function
-epolicy      = 0.05                   # Emissions Policy : Emissions reduction (%)  
-
 
 ######################################
 #### CARBON CYCLE COMPONENT      #####
