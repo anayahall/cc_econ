@@ -57,32 +57,20 @@ function concplot(;xarray::Array=year, yarray1::Array=test2,
         
 end
 
+function netoutput(;xarray::Array=year, yarray1::Array=test2)
+    
+    Gadfly.plot(layer(x=xarray, y=yarray1, Geom.line, Theme(default_color=color("red"))),                 
+        Guide.xlabel("Year"), Guide.ylabel("Net Output of Economy"), 
+        Guide.title("Difference in Net Output of Economy: BAU - Emissions Control"))
+        # Guide.manual_color_key("KEY:", ["BAU"], ["red"]))
+        
+end
+
+
 year = collect(2010:2300)
 test2 = collect(1:291)
 test3 = collect(2:292)
 
-### Prepare results for plotting
-
-BAU_temp = bau_run[:climatedynamics, :temp]
-ep1_temp = ep1_run[:climatedynamics, :temp]
-ep2_temp = ep2_run[:climatedynamics, :temp]
-
-
-
-# ei_temp = ei_run[:climatedynamics, :temp]
-# ci_temp = ci_run[:climatedynamics, :temp]
-
-# constant_temp = con_run[:climatedynamics, :temp]
-# ir_temp = ir_run[:climatedynamics, :temp]
-# lr_temp = lr_run[:climatedynamics, :temp]
-# s5_temp = s5_run[:climatedynamics, :temp]
-
-BAU_cost = bau_run[:abatement, :ab_cost]
-ep1_cost = ep1_run[:abatement, :ab_cost]
-ep2_cost = ep2_run[:abatement, :ab_cost]
-# constant_conc = con_run[:climatedynamics, :CO2ppm]
-# ir_conc = ir_run[:climatedynamics, :CO2ppm]
-# lr_conc = lr_run[:climatedynamics, :CO2ppm]
 
 
 println("*******************************************")

@@ -17,7 +17,7 @@ using Mimi
     temp0           = Parameter()
     climate_sens    = Parameter()
     delay           = Parameter()
-
+    
 end
 
 function run_timestep(state::climatedynamics, t::Int64)
