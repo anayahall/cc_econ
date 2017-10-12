@@ -42,7 +42,7 @@ function run_timestep(state::carboncycle, t::Int64)
         v.M_up[t] = (b12 * v.M_atm[t-1]) + (b22 * v.M_up[t-1]) + (b32 * v.M_lo[t-1])
     end
 
-    v.CO2ppm[t] = v.M_atm[t] / 2.12
+    v.CO2ppm[t] = v.M_atm[t] / 2.12             #GtC to CO2 ppm
 
 end
 

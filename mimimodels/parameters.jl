@@ -5,44 +5,61 @@
 using DataFrames
 
 ######################################
+####   GROSS & NET ECONOMY       #####
+######################################
+
+# L = [(1. + 0.015)^t *6404/5 for t in 1:291]
+A = [(0.118t - 235.06) for t in 2010:2300]   #Trendline from DICE values
+# A = [(1. + 0.065)^t * 3.57 for t in 1:291]
+s = ones(291).* 0.22
+k0 = 135.0          #From Dice!
+depk = 0.1          #From Dice!
+alpha = 0.3          #From Dice!
+
+
+######################################
 ####   EMISSIONS COMPONENT      #####
 ######################################
 
 include("iiasa_data.jl")
 
 df = kayadata
-
+L       = df[:Population]
 pop     = df[:Population]                  # persons (millions of people)   
 gdppc   = df[:GDPperCapita]                # GDP per capita ($ billions / millions of person)
 energyi = df[:Energy_Intensity]            # Energy Intensity = Energy Use (EJ) / GDP (billions $)
 carboni = df[:Emissions_intensity]         # Carbon Intensity = Emissions (Mt CO2) / Energy (EJ)
 luco2   = df[:LandUseEmissions]            # CO2 emissions from Land use (Mt CO2)
-gdp     = pop .* gdppc
+kaya_gdp  = pop .* gdppc
 
-# EMISSIONS POLICY #1
-epolicy1 = Array(Float64,291)                  # Emissions Policy : Emissions reduction (%)  
+# EMISSIONS POLICY SCENARIOS
+#
+epolicy1 = ones(291)
 for (index,y) in enumerate(1:291)
-    if y .< 20
+    if y == 1
+        epolicy1[y] = 30.0
+    else
         epolicy1[y] = 0.0
-    elseif y .< 90
-        epolicy1[y] = (100/70) + epolicy1[y-1]
-    elseif y .>= 90
-        epolicy1[y] = 100
     end
     # println("Y: ", y , "---- EPOLICY ", epolicy1[y])
 end
 
-# EMISSIONS POLICY #2
-epolicy2 = Array(Float64,291)                  # Emissions Policy : Emissions reduction (%)  
-for (index,y) in enumerate(1:291)
-    if y == 1
-        epolicy2[y] = (100/90)
-    elseif y .< 90
-        epolicy2[y] = (100/90) + epolicy2[y-1]
-    elseif y .>= 90
-        epolicy2[y] = 100
-    end
-end
+# for (index,y) in enumerate(1:291)
+#     if y .< 20
+#         epolicy1[y] = 0.0
+#     elseif y .< 90
+#         epolicy1[y] = (100/70) + epolicy1[y-1]
+#     elseif y .>= 90
+#         epolicy1[y] = 100
+#     end
+#     # println("Y: ", y , "---- EPOLICY ", epolicy1[y])
+# end
+# epolicy 1 = [(10/90)*t for t in 1:90] & [10 for t in 91:291]
+
+
+epolicy2 = ones(291).*20
+epolicy3 = ones(291).*30
+epolicy4 = ones(291).*40
 
 
 ######################################
@@ -107,3 +124,10 @@ climate_sens = 3 / (5.35 * log(2))
 delay = (1/66)
 temp0 = 0.85
 
+######################################
+####   DAMAGES                  #####
+######################################
+
+d_coeff = 0.0               # From Valeri!
+d_coeff_sq = 0.003          # From Valeri!
+d_exp = 2.0                 # From Valeri!
