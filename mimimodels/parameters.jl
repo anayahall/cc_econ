@@ -9,7 +9,7 @@ using DataFrames
 ######################################
 
 # L = [(1. + 0.015)^t *6404/5 for t in 1:291]
-A = [(0.118t - 235.06) for t in 2010:2300]   #Trendline from DICE values
+A = [(0.118t - 235.06) for t in 2010:2300]      #Trendline from DICE values
 # A = [(1. + 0.065)^t * 3.57 for t in 1:291]
 s = ones(291).* 0.22
 k0 = 135.0          #From Dice!
@@ -31,36 +31,6 @@ energyi = df[:Energy_Intensity]            # Energy Intensity = Energy Use (EJ) 
 carboni = df[:Emissions_intensity]         # Carbon Intensity = Emissions (Mt CO2) / Energy (EJ)
 luco2   = df[:LandUseEmissions]            # CO2 emissions from Land use (Mt CO2)
 kaya_gdp  = pop .* gdppc
-
-# EMISSIONS POLICY SCENARIOS
-#
-epolicy1 = ones(291)
-for (index,y) in enumerate(1:291)
-    if y == 1
-        epolicy1[y] = 30.0
-    else
-        epolicy1[y] = 0.0
-    end
-    # println("Y: ", y , "---- EPOLICY ", epolicy1[y])
-end
-
-# for (index,y) in enumerate(1:291)
-#     if y .< 20
-#         epolicy1[y] = 0.0
-#     elseif y .< 90
-#         epolicy1[y] = (100/70) + epolicy1[y-1]
-#     elseif y .>= 90
-#         epolicy1[y] = 100
-#     end
-#     # println("Y: ", y , "---- EPOLICY ", epolicy1[y])
-# end
-# epolicy 1 = [(10/90)*t for t in 1:90] & [10 for t in 91:291]
-
-
-epolicy2 = ones(291).*20
-epolicy3 = ones(291).*30
-epolicy4 = ones(291).*40
-
 
 ######################################
 ## EMISSIONS REDUCTIONS / ABATEMENT ## (FROM DICE MODEL)
@@ -131,3 +101,4 @@ temp0 = 0.85
 d_coeff = 0.0               # From Valeri!
 d_coeff_sq = 0.003          # From Valeri!
 d_exp = 2.0                 # From Valeri!
+d_elast = 0.00             #Three versions??? 

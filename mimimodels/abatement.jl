@@ -7,10 +7,10 @@ using Mimi
 
 @defcomp abatement begin
 
-    AC_coeff    = Variable(index=[time])       # Abatement Cost Coefficient
+    AC_coeff    = Variable(index=[time])       # Abatement Cost Coefficient (in GtCO2)
     AC_share    = Variable(index=[time])       # Abatement Cost Share
-    bkstop      = Variable(index=[time])
-    sigma       = Variable(index=[time])
+    bkstop      = Variable(index=[time])        # in thousands USD
+    sigma       = Variable(index=[time])        # MtCO2 per thousands USD
     ab_cost     = Variable(index=[time])
     sigma_rate   = Variable(index=[time])
     
@@ -19,11 +19,9 @@ using Mimi
     sigma0       = Parameter()                  # Sigma (industrial, MTCO2/$1000)
     AC_exponent = Parameter()                   # Exponent of control cost function
     epolicy     = Parameter(index=[time])       # Emissions Policy Control
-    gdp         = Parameter(index=[time])       # GDP per capita ($/person)
+    YGROSS         = Parameter(index=[time])       # GDP (YGROSS)
     
 end
-
-
 
 function run_timestep(state::abatement, t::Int64)
     v = state.Variables
@@ -39,10 +37,10 @@ function run_timestep(state::abatement, t::Int64)
         v.sigma[t]  = v.sigma[t-1] * exp(v.sigma_rate[t])
     end
 
-    v.AC_coeff[t] = v.bkstop[t] * v.sigma[t] / p.AC_exponent / 1000
+    v.AC_coeff[t] = (v.bkstop[t] * v.sigma[t] / p.AC_exponent) / 1000 
 
-    v.AC_share[t] = v.AC_coeff[t] * (p.epolicy[t] ^ p.AC_exponent)
+    v.AC_share[t] = v.AC_coeff[t] * (p.epolicy[t] ^ p.AC_exponent) 
 
-    v.ab_cost[t] = v.AC_share[t]*p.gdp[t]
+    v.ab_cost[t] = v.AC_share[t]* p.YGROSS[t] 
 end
 
