@@ -41,6 +41,7 @@ sigma0       = 0.489                  # Initial Sigma (industrial, MTCO2/$1000)
 sigma_rate   = -0.001                 # Growth rate of sigma (per year, log)
 AC_exponent  = 2.800                  # Exponent of control cost function
 
+
 ######################################
 #### CARBON CYCLE COMPONENT      #####
 ######################################
@@ -101,4 +102,4 @@ temp0 = 0.85
 d_coeff = 0.0               # From Valeri!
 d_coeff_sq = 0.003          # From Valeri!
 d_exp = 2.0                 # From Valeri!
-d_elast = 0.00             #Three versions??? 
+d_elast = 0.00             

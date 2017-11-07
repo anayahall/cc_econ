@@ -23,6 +23,7 @@ for (index,y) in enumerate(1:291)
     end
     # println("Y: ", y , "---- EPOLICY ", epolicy1[y])
 end
+d_elast_bau = 0.0
 
 bau_run = run_my_model(scenario="bau")
 ep1_run = run_my_model(scenario="EP1")
