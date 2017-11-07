@@ -43,7 +43,7 @@ end
 
 @defcomp neteconomy begin
 
-    YNET = Variable(index=[time])
+    YNET = Variable(index=[time])            #Trillions
     consumption = Variable(index=[time])    # Consumption
     cons_pc     = Variable(index=[time])    # Consumption per capita
 

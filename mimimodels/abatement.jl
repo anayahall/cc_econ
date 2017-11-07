@@ -19,7 +19,7 @@ using Mimi
     sigma0       = Parameter()                  # Sigma (industrial, MTCO2/$1000)
     AC_exponent = Parameter()                   # Exponent of control cost function
     epolicy     = Parameter(index=[time])       # Emissions Policy Control
-    YGROSS         = Parameter(index=[time])       # GDP (YGROSS)
+    YGROSS      = Parameter(index=[time])       # GDP (YGROSS)
     
 end
 

@@ -8,7 +8,6 @@ include("abatement.jl")
 include("carboncycle.jl")
 include("climatedynamics.jl")
 include("damages.jl")
-include("discountfactor.jl")
 
 function run_my_model(;scenario::AbstractString="bau")
        
@@ -24,7 +23,6 @@ function run_my_model(;scenario::AbstractString="bau")
     addcomponent(my_model, climatedynamics)
     addcomponent(my_model, damages)
     addcomponent(my_model, neteconomy)
-    addcomponent(my_model, discountfactor)
 
     #set parameters for GROSS ECONOMIC GROWTH COMPONENT
     setparameter(my_model, :grosseconomy, :L, L)
@@ -43,15 +41,34 @@ function run_my_model(;scenario::AbstractString="bau")
     setparameter(my_model, :emissions, :energyi, energyi)
     setparameter(my_model, :emissions, :carboni, carboni)
     setparameter(my_model, :emissions, :luco2, luco2)    
-    setparameter(my_model, :emissions, :epolicy, epolicy)            
-    setparameter(my_model, :emissions, :marginalton, marginalton)            
-    
+    if scenario == "bau"
+        setparameter(my_model, :emissions, :epolicy, fill(0.0,291))            
+    elseif scenario == "EP1"
+        setparameter(my_model, :emissions, :epolicy, epolicy1)
+    elseif scenario == "EP2"
+        setparameter(my_model, :emissions, :epolicy, epolicy2)
+    elseif scenario == "EP3"
+        setparameter(my_model, :emissions, :epolicy, epolicy3)
+    elseif scenario == "EP4"
+        setparameter(my_model, :emissions, :epolicy, epolicy4)
+    end   
+
     #set parameters for ABATEMENT COMPONENT
 	setparameter(my_model, :abatement, :bkstp0, bkstp0)
     setparameter(my_model, :abatement, :sigma0, sigma0)
     setparameter(my_model, :abatement, :sigma_rate, sigma_rate)
     setparameter(my_model, :abatement, :AC_exponent, AC_exponent)
-    setparameter(my_model, :abatement, :epolicy, epolicy)            
+    if scenario == "bau"
+        setparameter(my_model, :abatement, :epolicy, fill(0.0,291))            
+    elseif scenario == "EP1"
+        setparameter(my_model, :abatement, :epolicy, epolicy1)
+    elseif scenario == "EP2"
+        setparameter(my_model, :abatement, :epolicy, epolicy2)
+    elseif scenario == "EP3"
+        setparameter(my_model, :abatement, :epolicy, epolicy3)
+    elseif scenario == "EP4"
+        setparameter(my_model, :abatement, :epolicy, epolicy4)
+    end  
     connectparameter(my_model, :abatement, :YGROSS, :grosseconomy, :YGROSS)
     
     #set parameters for CARBON CYCLE COMPONENT
@@ -83,13 +100,13 @@ function run_my_model(;scenario::AbstractString="bau")
     connectparameter(my_model, :neteconomy, :abatement, :abatement, :ab_cost)
     connectparameter(my_model, :neteconomy, :d_dollars, :damages, :d_dollars)
 
-    #set parameters for DISCOUNT FACTOR COMPONENT
-    setparameter(my_model, :discountfactor, :year, Array(1:291))
-    setparameter(my_model, :discountfactor, :prtp, prtp)    
-    setparameter(my_model, :discountfactor, :eta, eta)        
-    connectparameter(my_model, :discountfactor, :pccons, :neteconomy, :cons_pc)
 
     run(my_model)
 	return(my_model)
 
 end
+
+# #Emissions - Policy
+
+
+# #Abatement policy

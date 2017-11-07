@@ -2,39 +2,27 @@
 # CCE - Fall 2017
 
 include("constructmodel.jl")
+include("parameters.jl")
+
+# Assigment 7: Scenarios around income elasticity
+d_elast_bau = 0.0
+d_elast_neg = -0.25
+d_elast_ie0 = 0.0
+d_elast_pos = 0.25
 
 ########################################################
 ##################### RUN MODEL ########################
 ########################################################
 
 using Mimi
-include("parameters.jl")
-
-# EMISSIONS POLICY SCENARIOS
-# #
-epolicy1 = ones(291).*0.0
-# epolicy1 = [(10/291)*t for t in 1:291]
-for (index,y) in enumerate(1:291)
-    if y == 1
-        epolicy1[y] = 0.30
-    else
-        epolicy1[y] = 0.0
-    end
-    # println("Y: ", y , "---- EPOLICY ", epolicy1[y])
-end
-
-epolicy2 = [(20/291)*t for t in 1:291]
-epolicy3 = [(30/291)*t for t in 1:291]
-epolicy4 = [(40/291)*t for t in 1:291]
 
 
-
-
+# INCOME ELASTICY SCENARIOS
 bau_run = run_my_model(scenario="bau")
-ep1_run = run_my_model(scenario="EP1")
-ep2_run = run_my_model(scenario="EP2")
-ep3_run = run_my_model(scenario="EP3")
-ep4_run = run_my_model(scenario="EP4")
+iepos_run = run_my_model(scenario="ie_pos")
+ie0_run = run_my_model(scenario="ie0")
+ieneg_run = run_my_model(scenario="ie_neg")
+
 
 println("*******************************************")
 println("MODEL DONE RUNNING")
@@ -44,14 +32,21 @@ println("*******************************************")
 ################### PLOT OUTPUT ########################
 ########################################################
 
-include("plots.jl")
+include("A7_plots.jl")
 # include("scenarios.jl")
 
-# tplot = tempplot(xarray = year, yarray1 = BAU_temp, yarray2 = constant_temp, yarray3 = ir_temp, yarray4 = lr_temp)
-# cplot = concplot(xarray = year, yarray1 = BAU_conc, yarray2 = constant_conc, yarray3 = ir_conc, yarray4 = lr_conc)
+# A7 PLOTS
+# Collect Variables
+BAU_dd = bau_run[:damages, :d_dollars]
+iepos_dd = iepos_run[:damages, :d_dollars]
+ieneg_dd = ieneg_run[:damages, :d_dollars]
+ie0_dd = ie0_run[:damages, :d_dollars]
 
-#A5 PLOT
-# netplot = netoutput(xarray = collect(2011:2300), yarray1 = delta_ynet[2:291])
+
+# Call plot
+callplota = A7plot(xarray = year, yarray1 = BAU_dd, yarray2 = iepos_dd, yarray3 = ie0_dd, yarray4 = ieneg_dd)
+
+callplotb = A7plotb(xarray = year, yarray1 = ieneg_dd, yarray2 = ie0_dd, yarray3 = iepos_dd)
 
 
 #A6 PLOT
@@ -63,3 +58,5 @@ include("plots.jl")
 # A6Q2B = abcost4(xarray = year, yarray1 = dabcost_ep1, yarray2 = dabcost_ep2, yarray3 = dabcost_ep3, yarray4 = dabcost_ep4)
 
 # A6Q2C = damages4(xarray = year, yarray1 = ep1_dgdp, yarray2 = ep2_dgdp, yarray3 = ep3_dgdp, yarray4 = ep4_dgdp)
+
+
