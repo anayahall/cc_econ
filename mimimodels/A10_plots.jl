@@ -20,7 +20,8 @@ function damageplot7(;xarray::Array=year, yarray1::Array=test2,
     layer(x=xarray, y=yarray7, Geom.line, Theme(default_color=color("purple"))),   
     Guide.xlabel("Year"), Guide.ylabel("Marginal Damages (PV USD)"), 
     Guide.title("Damages of Marginal Ton of CO2"),
-    Guide.manual_color_key("Discount Rate: ", ["r1= 0.00", "r2 = 0.05", "rdf3", "rdf4", "rdf5", "rdf6", "rdf7"], 
+    Guide.manual_color_key("Discount Rate: ", ["Undiscounted", "rho = 0.00", "rho = 0.01", "rho = 0.03", 
+        "r = 0.025", "r = 0.03", "r = 0.05"], 
     ["black", "red", "orange", "yellow", "green", "blue", "purple"]))
 
 end
@@ -31,15 +32,16 @@ function damageplot6(;xarray::Array=year, yarray1::Array=test2,
     yarray2::Array=test2, yarray3::Array=test2, yarray4::Array=test2,
     yarray5::Array=test2, yarray6::Array=test2)
     
-    Gadfly.plot(layer(x=xarray, y=yarray2, Geom.line, Theme(default_color=color("red"))),
-    layer(x=xarray, y=yarray3, Geom.line, Theme(default_color=color("orange"))),
-    layer(x=xarray, y=yarray4, Geom.line, Theme(default_color=color("yellow"))),
-    layer(x=xarray, y=yarray5, Geom.line, Theme(default_color=color("green"))),
-    layer(x=xarray, y=yarray6, Geom.line, Theme(default_color=color("blue"))),
-    layer(x=xarray, y=yarray7, Geom.line, Theme(default_color=color("purple"))),   
+    Gadfly.plot(layer(x=xarray, y=yarray1, Geom.line, Theme(default_color=color("red"))),
+    layer(x=xarray, y=yarray2, Geom.line, Theme(default_color=color("orange"))),
+    layer(x=xarray, y=yarray3, Geom.line, Theme(default_color=color("yellow"))),
+    layer(x=xarray, y=yarray4, Geom.line, Theme(default_color=color("green"))),
+    layer(x=xarray, y=yarray5, Geom.line, Theme(default_color=color("blue"))),
+    layer(x=xarray, y=yarray6, Geom.line, Theme(default_color=color("purple"))),   
     Guide.xlabel("Year"), Guide.ylabel("Marginal Damages (PV USD)"), 
     Guide.title("Damages of Marginal Ton of CO2"),
-    Guide.manual_color_key("Discount Rate: ", ["r2 = 0.05", "rdf3", "rdf4", "rdf5", "rdf6", "rdf7"], 
+    Guide.manual_color_key("Discount Rate: ", ["rho = 0.00", "rho = 0.01", "rho = 0.03", 
+    "r = 0.025", "r = 0.03", "r = 0.05"], 
     ["red", "orange", "yellow", "green", "blue", "purple"]))
 
 end
