@@ -56,7 +56,7 @@ function emission_data()
     # bring in data
     rcp85emis =  readtable("/Users/anayahall/projects/CCecon/data/RCP85_EMISSIONS.csv")
     #need to use fossil, industrial and landuse related CO2 emissions NOTE: Emissions are given in GtC/year
-    df = rcp85emis[37:end,1:3]                 #get rid of metadeta
+    df = rcp85emis[37:end,1:3]                 #get rid of metadata
 
     rename!(df, :RCP85__EMISSIONS____________________________, :Year)
     df[:Year] = float(df[:Year])

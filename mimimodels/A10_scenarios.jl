@@ -2,6 +2,7 @@ epolicy = fill(0.0,291)
 
 # Constant Discount Rates
 discount0 = fill(1.0,291)
+
 discount25 = [1/((1.025)^t) for t in 1:291]
 discount3 = [1/((1.03)^t) for t in 1:291]
 discount5 = [1/((1.05)^t) for t in 1:291]
@@ -31,7 +32,7 @@ bau_d = bau_run[:damages, :d_dollars]
 mar_d = mar_run[:damages, :d_dollars]
 
 damage_diff_p1 = (mar_d - bau_d).*(10^9)       #From billions of dollars to dollars
-ramseyDF = mar_run[:discountfactor, :ramseyDF]
+ramseyDF = bau_run[:discountfactor, :ramseyDF]
 diffp1 = ramseyDF.*damage_diff_p1
 SCCp1 = sum(diffp1)*(12/44)
 
@@ -55,7 +56,7 @@ bau_d = bau_run[:damages, :d_dollars]
 mar_d = mar_run[:damages, :d_dollars]
 
 damage_diff_p0 = (mar_d - bau_d).*(10^9)       #From billions of dollars to dollars
-ramseyDF = mar_run[:discountfactor, :ramseyDF]
+ramseyDF = bau_run[:discountfactor, :ramseyDF]
 diffp0 = ramseyDF.*damage_diff_p0
 SCCp0 = sum(diffp0)*(12/44)
 
@@ -79,7 +80,7 @@ bau_d = bau_run[:damages, :d_dollars]
 mar_d = mar_run[:damages, :d_dollars]
 
 damage_diff_p3 = (mar_d - bau_d).*(10^9)       #From billions of dollars to dollars
-ramseyDF = mar_run[:discountfactor, :ramseyDF]
+ramseyDF = bau_run[:discountfactor, :ramseyDF]
 diffp3 = ramseyDF.*damage_diff_p3
 SCCp3 = sum(diffp3)*(12/44)
 
