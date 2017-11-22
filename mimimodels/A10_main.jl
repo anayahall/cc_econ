@@ -28,16 +28,16 @@ Q2b = damageplot6(xarray=year, yarray1=diffp0, yarray2=diffp1, yarray3=diffp3,
 
 climate_sens = 2 / (5.35 * log(2))
 include("A10_scenarios.jl")
-A10_cs2 = [SCCp0; SCCp1; SCCp3; SCCr25; SCCr3; SCCr5]
+A10_cs2 = [SCCp0 SCCp1 SCCp3 SCCr25 SCCr3 SCCr5]
 A10_cs2df = convert(DataFrame, A10_cs2)
 
 
 climate_sens = 4.5 / (5.35 * log(2))
 include("A10_scenarios.jl")
-A10_cs45 = [SCCp0; SCCp1; SCCp3; SCCr25; SCCr3; SCCr5]
+A10_cs45 = [SCCp0 SCCp1 SCCp3 SCCr25 SCCr3 SCCr5]
 A10_cs45df = convert(DataFrame, A10_cs45)
 
 
-# A10 = [A10_cs3, A10_cs2, A10_cs45]
-# A10df = convert(DataFrame, A10)
+A10 = [A10_cs3, A10_cs2, A10_cs45]
+A10df = convert(DataFrame, A10)
 # writetable("SCC.csv",A10df)

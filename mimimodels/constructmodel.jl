@@ -43,8 +43,12 @@ function run_my_model(;scenario::AbstractString="bau")
     setparameter(my_model, :emissions, :energyi, energyi)
     setparameter(my_model, :emissions, :carboni, carboni)
     setparameter(my_model, :emissions, :luco2, luco2)    
-    setparameter(my_model, :emissions, :epolicy, epolicy)            
-    setparameter(my_model, :emissions, :marginalton, marginalton)            
+    setparameter(my_model, :emissions, :epolicy, epolicy)
+    if scenario == "bau"            
+        setparameter(my_model, :emissions, :marginalton, 0.0)
+    elseif scenario == "mar"
+        setparameter(my_model, :emissions, :marginalton, (1/(10^6))*(44/12))        
+    end            
     
     #set parameters for ABATEMENT COMPONENT
 	setparameter(my_model, :abatement, :bkstp0, bkstp0)
