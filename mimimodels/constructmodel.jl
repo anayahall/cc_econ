@@ -9,6 +9,7 @@ include("carboncycle.jl")
 include("climatedynamics.jl")
 include("damages.jl")
 include("discountfactor.jl")
+include("welfare.jl")
 
 function run_my_model(;scenario::AbstractString="bau")
        
@@ -25,6 +26,7 @@ function run_my_model(;scenario::AbstractString="bau")
     addcomponent(my_model, damages)
     addcomponent(my_model, neteconomy)
     addcomponent(my_model, discountfactor)
+    addcomponent(my_model, welfare)
 
     #set parameters for GROSS ECONOMIC GROWTH COMPONENT
     setparameter(my_model, :grosseconomy, :L, L)
@@ -89,9 +91,14 @@ function run_my_model(;scenario::AbstractString="bau")
 
     #set parameters for DISCOUNT FACTOR COMPONENT
     setparameter(my_model, :discountfactor, :year, Array(1:291))
-    setparameter(my_model, :discountfactor, :prtp, prtp)    
+    setparameter(my_model, :discountfactor, :rho, rho)    
     setparameter(my_model, :discountfactor, :eta, eta)        
     connectparameter(my_model, :discountfactor, :pccons, :neteconomy, :cons_pc)
+
+    #set parameters for WELFARE COMPONENT
+    setparameter(my_model, :welfare, :pop, pop)
+    setparameter(my_model, :welfare, :rho, rho)
+    connectparameter(my_model, :welfare, :pccons, :neteconomy, :cons_pc)
 
     run(my_model)
 	return(my_model)
