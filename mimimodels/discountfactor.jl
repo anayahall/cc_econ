@@ -11,7 +11,7 @@ using Mimi
     constantDF  = Variable(index=[time])     # Constant Discount Factor
     
     #Parameters
-    prtp   = Parameter()                # RHO - Pure Rate of Time Preference
+    rho   = Parameter()                # RHO - Pure Rate of Time Preference
     eta    = Parameter()                 # ETA = risk aversion
     pccons = Parameter(index=[time])     # Per capita consumption #FROM NET ECONOMY
     year   = Parameter(index=[time])
@@ -21,7 +21,7 @@ function run_timestep(state::discountfactor, t::Int64)
     v = state.Variables
     p = state.Parameters
 
-    v.ramseyDF[t] = (p.pccons[1]/p.pccons[t]) * (1/((1+p.prtp)^(p.year[t])))
+    v.ramseyDF[t] = (p.pccons[1]/p.pccons[t]) * (1/((1+p.rho)^(p.year[t])))
 
 end
 
