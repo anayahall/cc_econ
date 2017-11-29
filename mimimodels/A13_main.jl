@@ -2,35 +2,92 @@
 # CCE - Fall 2017
 
 using Mimi
+using NLopt
 
 include("parameters.jl")
 include("constructmodel.jl")
 
 rho = 0.00
 eta = 1.0
-discount3 = [1/((1.03)^t) for t in 1:291]
-
+#discount3 = [1/((1.03)^t) for t in 1:291]
 
 # No emissions policy???
-epolicy = fill(0.0,291)
+# epolicy = fill(0.0,291)
 
 rho_array = [0.001, 0.01, 0.03]
+
+count = 0 # keep track of # function evaluations
+
+epolicy = Array{Float64}(291)
+
+
+function wrapper(;x::AbstractArray=fill(0.0,10))
+
+# function wrapper(x::Vector)
+
+    # emschedule = x
+
+    # global count
+    # count::Int += 1
+    # println("f_$count($x)")
+
+
+    # for year = 1:291
+    #     if year < 101
+    #         epolicy[year] = x[Int(ceil(year/10))]
+    #     else
+    #         epolicy[year] = x[10]
+    #     end
+    # end
+
+    # println("INSIDE WRAPPER!! EPOLICY: ", epolicy[1], "***...***", epolicy[100])
+   
+    # # bau_run = run_my_model(scenario="bau")
+
+    # # socwel = bau_run[:welfare, :welfare]
+    # # welfare_sum = sum(socwel)
+
+    # # return welfare_sum
+
+    return(x.*700)
+
+end
+
+function myfunc(x::Vector, grad::Vector)
+    if length(grad) > 0
+        grad[1] = 0
+        grad[2] = 0.5/sqrt(x[2])
+    end
+
+    global count
+    count::Int += 1
+    println("f_$count($x)")
+
+    sqrt(x[2])
+end
 
 for i in rho_array
 
     rho = i
 
-    bau_run = run_my_model(scenario="bau")
-    
-    # mar_run = run_my_model(scenario="mar")
-    
-    socwel = bau_run[:welfare, :welfare]
-    
-    welfare_sum = sum(discount3.*socwel)
+    #optimization!!
+    opt = Opt(:LN_NELDERMEAD, 10)
+    lower_bounds!(opt, [0.,0.,0.,0.,0.,0.,0.,0.,0.,0.])
+    upper_bounds!(opt, [1.,1.,1.,1.,1.,1.,1.,1.,1.,1.])
 
-    println("RHO: ", i)
-    println("SOCIAL WELFARE: ", welfare_sum)
+    max_objective!(opt::Opt, myfunc::Function)
+    maxeval!(opt, 10)
+    decvar = fill(0.1,10)
+
     println("**********************************")
+    println("ABOUT TO OPTIMIZE!")
+    println("**********************************")    
+    (maxf,maxx,ret) = optimize(opt::Opt, decvar)
+    println("got $maxf at $maxx after $count iterations (returned $ret)")
+
+    # println("RHO: ", i)
+    # println("SOCIAL WELFARE: ", welfare_sum)
+    # println("**********************************")
 
 end
 
