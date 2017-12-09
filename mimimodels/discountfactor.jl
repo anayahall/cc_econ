@@ -20,6 +20,7 @@ end
 function run_timestep(state::discountfactor, t::Int64)
     v = state.Variables
     p = state.Parameters
+    
 
     v.ramseyDF[t] = (p.pccons[1]/p.pccons[t]) * (1/((1+p.rho)^(p.year[t])))
 

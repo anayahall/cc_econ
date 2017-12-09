@@ -15,7 +15,7 @@ eta = 1.0
 ########################################################
 
 # RUN MODEL SCENARIOS
-prtp = 0.01
+rho = 0.01
 
 #BASE RUN
 marginalton = 0.0
