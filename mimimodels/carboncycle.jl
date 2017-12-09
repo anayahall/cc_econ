@@ -5,8 +5,8 @@
 using Mimi
 
 #Define relative concentration parameters
-b21 = (3.83 / 100) / 5
-b12 = (8.80 / 100) / 5
+b21 = (3.83 / 100) / 5 #up to atm
+b12 = (8.80 / 100) / 5  
 b32 = (0.03 / 100) / 5
 b23 = (0.25 / 100) / 5
 b11 = 1. - b12
@@ -42,7 +42,7 @@ function run_timestep(state::carboncycle, t::Int64)
         v.M_up[t] = (b12 * v.M_atm[t-1]) + (b22 * v.M_up[t-1]) + (b32 * v.M_lo[t-1])
     end
 
-    v.CO2ppm[t] = v.M_atm[t] / 2.12             #GtC to CO2 ppm
+    v.CO2ppm[t] = v.M_atm[t] *(1 / 2.12)             #GtC to CO2 ppm
 
 end
 

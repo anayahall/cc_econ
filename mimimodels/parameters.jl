@@ -9,12 +9,14 @@ using DataFrames
 ######################################
 
 # L = [(1. + 0.015)^t *6404/5 for t in 1:291]
-A = [(0.118t - 235.06) for t in 2010:2300]      #Trendline from DICE values
+
+tfp_df = readtable("/Users/anayahall/projects/CCecon/data/TFP.csv")
+A = tfp_df[:tfp]    #Trendline from DICE values
 # A = [(1. + 0.065)^t * 3.57 for t in 1:291]
 s = ones(291).* 0.22
-k0 = 135.0          #From Dice!
-depk = 0.1          #From Dice!
-alpha = 0.3          #From Dice!
+k0 = 135.0          #INITIAL CAPITAL From Dice!
+depk = 0.1          #DEPRECIATION From Dice!
+alpha = 0.3          #SHARE From Dice!
 
 
 ######################################
@@ -36,11 +38,18 @@ kaya_gdp  = pop .* gdppc
 ## EMISSIONS REDUCTIONS / ABATEMENT ## (FROM DICE MODEL)
 ######################################
 
-bkstp0       = 344.000                # Initial Backstop Price ( $1000 / tC )
-sigma0       = 0.489                  # Initial Sigma (industrial, MTCO2/$1000)
-sigma_rate   = -0.001                 # Growth rate of sigma (per year, log)
+# bkstp0       = 344.000                # Initial Backstop Price ( $1000 / tC )
+# sigma0       = 0.489                  # Initial Sigma (industrial, MTCO2/$1000)
+# sigma_rate   = -0.001                 # Growth rate of sigma (per year, log)
 AC_exponent  = 2.800                  # Exponent of control cost function
 
+
+    
+bs_df = readtable("/Users/anayahall/projects/CCecon/data/BackstopPrice.csv")
+sigma_df = readtable("/Users/anayahall/projects/CCecon/data/Sigma.csv")
+
+backstop = bs_df[:backstop_price]
+sigma = sigma_df[:sigma]
 
 ######################################
 #### CARBON CYCLE COMPONENT      #####
@@ -94,6 +103,17 @@ CO2ppm0 = 275.0
 climate_sens = 3 / (5.35 * log(2))
 delay = (1/66)
 temp0 = 0.85
+
+
+######################################
+## SEA LEVEL RISE PARAMETERS        ##
+######################################
+
+ef        = 500.0
+slsens    = 2.0
+psi      = 0.005
+omega    = 0.003
+
 
 ######################################
 ####   DAMAGES                  #####

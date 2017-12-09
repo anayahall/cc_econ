@@ -35,7 +35,7 @@ function run_timestep(state::emissions, t::Int64)
         v.fossil[t] = (p.YGROSS[t] * p.energyi[t] * p.carboni[t])
     end
 
-    v.emis[t] =  (v.fossil[t] + p.luco2[t]) * (1 - (p.epolicy[t])) * (12/44)/(10^3)     #convert from Mt CO2 to Gt C
+    v.emis[t] =  ((v.fossil[t] + p.luco2[t]) * (1 - (p.epolicy[t]))) * (12/44)/(10^3)     #convert from Mt CO2 to Gt C
     # println("TIME: ", t, "----- EMIS: ", v.emis[t])
 
 

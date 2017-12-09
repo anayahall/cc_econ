@@ -7,6 +7,7 @@ include("emissions.jl")
 include("abatement.jl")
 include("carboncycle.jl")
 include("climatedynamics.jl")
+include("sealevelrise.jl")
 include("damages.jl")
 include("discountfactor.jl")
 include("welfare.jl")
@@ -24,6 +25,7 @@ function run_my_model(;scenario::AbstractString="bau")
     addcomponent(my_model, carboncycle)  
     addcomponent(my_model, climatedynamics)
     addcomponent(my_model, damages)
+    addcomponent(my_model, sealevelrise)
     addcomponent(my_model, neteconomy)
     addcomponent(my_model, discountfactor)
     addcomponent(my_model, welfare)
@@ -53,9 +55,11 @@ function run_my_model(;scenario::AbstractString="bau")
     end            
     
     #set parameters for ABATEMENT COMPONENT
-	setparameter(my_model, :abatement, :bkstp0, bkstp0)
-    setparameter(my_model, :abatement, :sigma0, sigma0)
-    setparameter(my_model, :abatement, :sigma_rate, sigma_rate)
+	# setparameter(my_model, :abatement, :bkstp0, bkstp0)
+    # setparameter(my_model, :abatement, :sigma0, sigma0)
+    # setparameter(my_model, :abatement, :sigma_rate, sigma_rate)
+    setparameter(my_model, :abatement, :backstop, backstop)
+    setparameter(my_model, :abatement, :sigma, sigma)
     setparameter(my_model, :abatement, :AC_exponent, AC_exponent)
     setparameter(my_model, :abatement, :epolicy, epolicy)            
     connectparameter(my_model, :abatement, :YGROSS, :grosseconomy, :YGROSS)
@@ -66,7 +70,7 @@ function run_my_model(;scenario::AbstractString="bau")
     setparameter(my_model, :carboncycle, :M_up0, M_up0)
     connectparameter(my_model, :carboncycle, :CO2emis, :emissions, :emis)    
 
-	# Set parameters for CLIMATE DYNAMICS COMPONENT
+	# CLIMATE DYNAMICS COMPONENT
     setparameter(my_model, :climatedynamics, :CO2ppm0, CO2ppm0)
     setparameter(my_model, :climatedynamics, :RF_Other, RF_Other)
     setparameter(my_model, :climatedynamics, :climate_sens, climate_sens)
@@ -74,12 +78,20 @@ function run_my_model(;scenario::AbstractString="bau")
     setparameter(my_model, :climatedynamics, :temp0, temp0)
 	connectparameter(my_model, :climatedynamics, :CO2ppm, :carboncycle, :CO2ppm)
     
+    # SEA LEVEL RISE COMPONENT
+    setparameter(my_model, :sealevelrise, :ef, ef)
+    setparameter(my_model, :sealevelrise, :slsens, slsens)
+    setparameter(my_model, :sealevelrise, :psi, psi)
+    setparameter(my_model, :sealevelrise, :omega, omega)
+    connectparameter(my_model, :sealevelrise, :temp, :climatedynamics, :temp)
+    
     # Set parameters for DAMAGE COMPONENT
     setparameter(my_model, :damages, :d_coeff, d_coeff)
     setparameter(my_model, :damages, :d_coeff_sq, d_coeff_sq)
     setparameter(my_model, :damages, :d_exp, d_exp)
     setparameter(my_model, :damages, :d_elast, d_elast)
     connectparameter(my_model, :damages, :temp, :climatedynamics, :temp)
+    connectparameter(my_model, :damages, :slr_damages, :sealevelrise, :slr_damages)    
     connectparameter(my_model, :damages, :YGROSS, :grosseconomy, :YGROSS)
     
     #set parameters for NET ECONOMIC GROWTH COMPONENT
