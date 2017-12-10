@@ -51,6 +51,8 @@ sigma_df = readtable("/Users/anayahall/projects/CCecon/data/Sigma.csv")
 backstop = bs_df[:backstop_price]
 sigma = sigma_df[:sigma]
 
+
+
 ######################################
 #### CARBON CYCLE COMPONENT      #####
 ######################################
