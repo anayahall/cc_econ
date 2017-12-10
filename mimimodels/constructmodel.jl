@@ -12,7 +12,7 @@ include("damages.jl")
 include("discountfactor.jl")
 include("welfare.jl")
 
-function run_my_model(;scenario::AbstractString="bau")
+function run_my_model(;scenario::AbstractString="bau", slr::AbstractString="yes")
        
     my_model = Model()
 
@@ -25,7 +25,7 @@ function run_my_model(;scenario::AbstractString="bau")
     addcomponent(my_model, carboncycle)  
     addcomponent(my_model, climatedynamics)
     addcomponent(my_model, damages)
-    addcomponent(my_model, sealevelrise)
+    addcomponent(my_model, sealevelrise)    
     addcomponent(my_model, neteconomy)
     addcomponent(my_model, discountfactor)
     addcomponent(my_model, welfare)
@@ -48,16 +48,13 @@ function run_my_model(;scenario::AbstractString="bau")
     setparameter(my_model, :emissions, :carboni, carboni)
     setparameter(my_model, :emissions, :luco2, luco2)    
     setparameter(my_model, :emissions, :epolicy, epolicy)
-    if scenario == "bau"            
+    if scenario == "bau"         
         setparameter(my_model, :emissions, :marginalton, 0.0)
     elseif scenario == "mar"
         setparameter(my_model, :emissions, :marginalton, (1/(10^6))*(44/12))        
     end            
     
     #set parameters for ABATEMENT COMPONENT
-	# setparameter(my_model, :abatement, :bkstp0, bkstp0)
-    # setparameter(my_model, :abatement, :sigma0, sigma0)
-    # setparameter(my_model, :abatement, :sigma_rate, sigma_rate)
     setparameter(my_model, :abatement, :backstop, backstop)
     setparameter(my_model, :abatement, :sigma, sigma)
     setparameter(my_model, :abatement, :AC_exponent, AC_exponent)
@@ -81,8 +78,6 @@ function run_my_model(;scenario::AbstractString="bau")
     # SEA LEVEL RISE COMPONENT
     setparameter(my_model, :sealevelrise, :ef, ef)
     setparameter(my_model, :sealevelrise, :slsens, slsens)
-    setparameter(my_model, :sealevelrise, :psi, psi)
-    setparameter(my_model, :sealevelrise, :omega, omega)
     connectparameter(my_model, :sealevelrise, :temp, :climatedynamics, :temp)
     
     # Set parameters for DAMAGE COMPONENT
@@ -91,15 +86,28 @@ function run_my_model(;scenario::AbstractString="bau")
     setparameter(my_model, :damages, :d_exp, d_exp)
     setparameter(my_model, :damages, :d_elast, d_elast)
     connectparameter(my_model, :damages, :temp, :climatedynamics, :temp)
-    connectparameter(my_model, :damages, :slr_damages, :sealevelrise, :slr_damages)    
+    # connectparameter(my_model, :damages, :slr_damages, :sealevelrise, :slr_damages)    
     connectparameter(my_model, :damages, :YGROSS, :grosseconomy, :YGROSS)
     
+    setparameter(my_model, :damages, :psi, psi)
+    setparameter(my_model, :damages, :omega, omega)
+    connectparameter(my_model, :damages, :slr, :sealevelrise, :slr)
+
     #set parameters for NET ECONOMIC GROWTH COMPONENT
     setparameter(my_model, :neteconomy, :pop, pop)
     setparameter(my_model, :neteconomy, :savings, s)    
     connectparameter(my_model, :neteconomy, :YGROSS, :grosseconomy, :YGROSS)
     connectparameter(my_model, :neteconomy, :abatement, :abatement, :ab_cost)
-    connectparameter(my_model, :neteconomy, :d_dollars, :damages, :d_dollars)
+    # switch d_dollars in og model for total_damages in update with slr
+    
+    if slr == "yes"
+        connectparameter(my_model, :neteconomy, :d_dollars, :damages, :total_damages)
+    elseif slr == "no"
+        println("*************************")
+        println("NET ECONOMY COMPONENT -- NO SLR!!!")
+        println("*************************")  
+        connectparameter(my_model, :neteconomy, :d_dollars, :damages, :d_dollars)
+    end
 
     #set parameters for DISCOUNT FACTOR COMPONENT
     setparameter(my_model, :discountfactor, :year, Array(1:291))
@@ -116,3 +124,5 @@ function run_my_model(;scenario::AbstractString="bau")
 	return(my_model)
 
 end
+
+
