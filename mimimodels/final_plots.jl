@@ -32,8 +32,8 @@ function damage2(;xarray::Array=year, yarray1::Array=test2,
     
     Gadfly.plot(layer(x=xarray, y=yarray1, Geom.line, Theme(default_color=color("black"))),
     layer(x=xarray, y=yarray2, Geom.line, Theme(default_color=color("orange"))),        
-    Guide.xlabel("Year"), Guide.ylabel("Damages (USD)"), 
-    Guide.title("Climate Damages - The Impact of Sea Level Rise (SLR)"),
+    Guide.xlabel("Year"), Guide.ylabel("Damages (Billions of USD)"), 
+    Guide.title("Discounted Climate Damages - The Impact of Sea Level Rise (SLR)"),
     Guide.manual_color_key("Scenario: ", ["BAU", "SLR"], 
     ["black", "orange"]))
 

@@ -52,11 +52,11 @@ epolicy40 = fill(.4,291)
 ep_array = [epolicy10 epolicy40 oep_array] 
 
 # Discount Methods
-rho_array = [0.01, 0.01, 0.03] #pure rate of time preference
+rho_array = [0.001, 0.01, 0.03] #pure rate of time preference
 constdr_array = [0.025, 0.03, 0.05] #constant discount rates
 
 ################################################################################
-## LOOPS
+## LOOP!!
 ################################################################################
 
 for policychoice = 1:5 #five emissions policies
@@ -108,8 +108,6 @@ end
 ## OUTPUT RESULTS
 ################################################################################
 
-# PLOTS: 
-
 # TABLES:
 
 #ABATEMENT COSTS
@@ -119,7 +117,8 @@ writetable("abatementcosts.csv",abcost_table)
 #AVOIDED DAMAGES
 benefits_table = convert(DataFrame, npv_damages)
 writetable("avoideddamages.csv",benefits_table)
-    
+
+## COST MINUS BENEFIT
 CBA_table = convert(DataFrame, results_CBA)
 writetable("CBA.csv",CBA_table)
 
