@@ -4,6 +4,9 @@
 # Modeling Question #2
 
 using Mimi
+rho = 0.0
+eta = 1.0
+epolicy = fill(0.0, 291)
 
 include("parameters.jl")
 include("constructmodel.jl")
@@ -37,6 +40,9 @@ difference = (mar_noslr[:neteconomy, :d_dollars] - bau_noslr[:neteconomy, :d_dol
 SCC_noslr = sum(difference .* df3)*(12/44)
 println("CALCULATING SCC w/out SLR")
 
+println("Damges (SLR): ", sum((bau_slr[:neteconomy, :d_dollars]).*df3))
+println("Damages (no SLR): ", sum((bau_noslr[:neteconomy, :d_dollars]).*df3))
+
 
 println("*************************************************************")
 println("SCC with SLR: ", SCC_slr)
@@ -48,8 +54,8 @@ println("*************************************************************")
 ## PLOT DAMAGES OF BASERUNS : BAU (no SLR) v SLR
 
 
-d_slr = bau_slr[:neteconomy, :d_dollars]  
-d_noslr = bau_noslr[:neteconomy, :d_dollars]
+d_slr = bau_slr[:neteconomy, :d_dollars].*df3
+d_noslr = bau_noslr[:neteconomy, :d_dollars].*df3
 
 plot2 = damage2(xarray = year, yarray1 = d_noslr, yarray2 = d_slr)
 

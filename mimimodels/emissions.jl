@@ -30,9 +30,9 @@ function run_timestep(state::emissions, t::Int64)
     p = state.Parameters
 
     if t == 2
-        v.fossil[t] = (p.YGROSS[t] * p.energyi[t] * p.carboni[t]) + p.marginalton
+        v.fossil[t] = (p.YGROSS[t] * p.energyi[t] * p.carboni[t]) + p.marginalton       #Mt CO2
     else
-        v.fossil[t] = (p.YGROSS[t] * p.energyi[t] * p.carboni[t])
+        v.fossil[t] = (p.YGROSS[t] * p.energyi[t] * p.carboni[t])                       #Mt CO2
     end
 
     v.emis[t] =  ((v.fossil[t] + p.luco2[t]) * (1 - (p.epolicy[t]))) * (12/44)/(10^3)     #convert from Mt CO2 to Gt C
