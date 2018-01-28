@@ -25,7 +25,7 @@ rename!(df, :x_1, :OtherCO2)
 df[:CO2emis] = df[:FossilCO2] + df[:OtherCO2]
 df = df[(df[:Year].>=2010)&(df[:Year].<=2300),:]
 
-sdf = df
+# sdf = df
 
 ### set parameters
 alpha = 0.5
@@ -49,18 +49,24 @@ function carboncycle(;CO2constant=false)               #;scenario=AbstractString
     M_up = M_up0
     M_lo = M_lo0
 
+    carbon_data= DataFrame(Year = Float64[], CO2emis = Float64[], M_atm = Float64[], CO2conc = Float64[])
+
     for (index, year) in enumerate(df[:Year])
         println("****************")        
         println("Year:", year)
-        # println("Emissions (MtC): ", df[:CO2emis][index])
         
         #Scenario 
         if CO2constant
-            df[:CO2emis] = 0
+            # println("df[:CO2emis]", df[:CO2emis])
+            emis = df[:CO2emis][1]
+            # println("co1. :", emis)
+
             # println("Scenario: ", scenario)
         else 
-            df[:CO2emis] = df[:CO2emis]
-            # println("Scenario: ", scenario)
+            emis = df[:CO2emis][index]
+            # println("co2+++ :", emis)
+            # println("df[:CO2emis]", df[:CO2emis])
+            # println("CO2constant: ", CO2constant)
         # elseif scenario == "imm_reduce"
         #     CO2emis = df[:CO2emis] * reduction
         #     println("Scenario: ", scenario)
@@ -77,6 +83,8 @@ function carboncycle(;CO2constant=false)               #;scenario=AbstractString
         
         if index == 1
             M_atm = M_atm0
+            M_up = M_up0
+            M_lo = M_lo0
         else
             #save previous years for use in formulas
             M_lo_lag = M_lo
@@ -84,26 +92,25 @@ function carboncycle(;CO2constant=false)               #;scenario=AbstractString
             M_atm_lag = M_atm
 
             #calculate new concentrations in three resevoirs
-            M_atm = df[:CO2emis] + (b11 * M_atm) + (b21 * M_up_lag)            
+            M_atm = emis + (b11 * M_atm) + (b21 * M_up_lag)            
             M_lo = (b23 * M_up_lag) + (b33 * M_lo_lag)
             M_up = (b12 * M_atm_lag) + (b22 * M_up_lag) + (b32 * M_lo_lag)
         end
-        df[:M_atm] = M_atm
-        # df[:CO2emis] = CO2emis
-        # df[:scenario] = scenario
+        co2conc = M_atm / 2.12
+        push!(carbon_data, [year, emis, M_atm, co2conc])        
     end
-    df[:CO2conc] = df[:M_atm]/2.12
-    df                      # Change GtC to ppm
-    return df
+    return carbon_data
 end
 
-carbon_data = df
+
 
 
 #TEST RUN
 # constant = carboncycle(CO2constant=true)
-#           #Constant CO2 Scenario
-# base = carboncycle(CO2constant=false)                     #Base Scenario
+# println("^^^^^^^^^^^^^^^^^^ constant", constant)
+
+base = carboncycle(CO2constant=false)                     #Base Scenario
+# println("*******************  base", base)
 # # scen3 = carboncycle(scenario="imm_reduce") 
 # # scen4 = carboncycle(scenario="later_reduce") 
 
@@ -112,11 +119,3 @@ carbon_data = df
 
 # carbon_data = base
 
-
-# if df[:Year][index] < 2049
-#     # df[:CO2emis]= df[:CO2emis]
-#     println("year less than 2049", year)
-# else
-#     # df[:CO2emis] = df[:CO2emis][41]
-#     println("Year above 2049", year)
-# end

@@ -5,7 +5,7 @@ using Mimi
     YGROSS  = Variable(index=[time])    #Gross output
     K       = Variable(index=[time])    #Capital
     l       = Parameter(index=[time])   #Labor
-    tfp     = Parameter(index=[time])   #Total factor productivity
+    A     = Parameter(index=[time])   #Total factor productivity
     s       = Parameter(index=[time])   #Savings rate
     depk    = Parameter()               #Depreciation rate on capital - Note that it has no time index
     k0      = Parameter()               #Initial level of capital
@@ -24,7 +24,7 @@ function timestep(state::grosseconomy, t::Int)
     end
 
     #Define an equation for YGROSS
-    v.YGROSS[t] = p.tfp[t] * v.K[t]^p.share * p.l[t]^(1-p.share)
+    v.YGROSS[t] = p.A[t] * v.K[t]^p.share * p.l[t]^(1-p.share)
 end
 
 @defcomp emissions begin
@@ -50,7 +50,7 @@ addcomponent(my_model, emissions)
 
 #Set parameters for the grosseconomy component
 setparameter(my_model, :grosseconomy, :l, [(1. + 0.015)^t *6404 for t in 1:20])
-setparameter(my_model, :grosseconomy, :tfp, [(1 + 0.065)^t * 3.57 for t in 1:20])
+setparameter(my_model, :grosseconomy, :A, [(1 + 0.065)^t * 3.57 for t in 1:20])
 setparameter(my_model, :grosseconomy, :s, ones(20).* 0.22)
 setparameter(my_model, :grosseconomy, :depk, 0.1)
 setparameter(my_model, :grosseconomy, :k0, 130.)

@@ -1,8 +1,8 @@
 using DataFrames
 
-# include("carboncycle.jl")
-# println("CARBON CYCLE RUNNING")
-# println("output", carbon_data)
+include("carboncycle.jl")
+println("CARBON CYCLE RUNNING")
+println("output", carbon_data)
 
 #non-co2 forcing data
 rcp85conc =  readtable("/Users/anayahall/projects/CCecon/data/RCP85_MIDYEAR_CONCENTRATIONS/RCP85_MIDYEAR_CONCENTRATIONS-Table 1.csv")
@@ -11,7 +11,6 @@ rcp85rf   =  readtable("/Users/anayahall/projects/CCecon/data/RCP85_MIDYEAR_RADF
 
 rcp85rf = rcp85rf[(rcp85rf[:v_YEARS_GAS_].>=2010)&(rcp85rf[:v_YEARS_GAS_].<=2300),:]
 
-# println("DATA IN")
 
 #Set Parameters
 alpha = 5.35    # (S2: Ramaswamy 2001)
@@ -24,11 +23,12 @@ CO20 = 275
 # println("*************************")
 # println("*************************")
 
-# println("CO2 concs   ", carbon_data[:CO2conc])
-
+println("CO2 concs   ", carbon_data[:CO2conc])
 df = carbon_data
 
+
 function calcForcing(;CO2constant=false)
+    df = carbon_data
     tempanomaly = 0
     forcing_data = DataFrame(Year = Float64[], CO2emis = Float64[], CO2conc = Float64[], TempAnomaly = Float64[], scenario = AbstractString[])
     
